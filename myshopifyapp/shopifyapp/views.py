@@ -9,7 +9,7 @@ from .zoho_utils import create_zoho_customer, create_zoho_order, create_zoho_inv
 
 SHOPIFY_API_KEY = '94c77683151ad23c0664e785feb23048'
 SHOPIFY_API_SECRET = 'ad46f2cea98eb672875a0bb2bb8f564b'
-SHOPIFY_REDIRECT_URI = 'https://shopify-app-sii3.onrender.com/callback'
+SHOPIFY_REDIRECT_URI = 'https://shopify-app-sii3.onrender.com/shopify/callback'
 SHOPIFY_SCOPE = 'read_orders,read_products,write_orders,write_products,read_customers, write_customers'
 
 def install_app(request):
