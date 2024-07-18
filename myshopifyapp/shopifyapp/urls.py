@@ -1,9 +1,9 @@
-# shopifyapp/urls.py
 from django.urls import path
-from .views import install, finalize, add_contact_to_zoho
+from . import views
 
 urlpatterns = [
-    path('install/', install, name='install'),
-    path('finalize/', finalize, name='finalize'),
-    path('add-contact/', add_contact_to_zoho, name='add_contact_to_zoho'),
+    path('install/', views.install_app, name='install_app'),
+    path('callback/', views.callback, name='callback'),
+    path('enter-zoho-details/<str:shop_name>/', views.enter_zoho_details, name='enter_zoho_details'),
+    path('webhook/', views.webhook, name='webhook'),
 ]

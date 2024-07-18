@@ -1,37 +1,65 @@
-# shopifyapp/views.py
-import shopify
-from django.shortcuts import redirect
+import requests
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
+from .forms import ZohoDetailsForm
+from .models import ShopifyStore 
 from django.views.decorators.csrf import csrf_exempt
+from .zoho_utils import create_zoho_customer, create_zoho_order, create_zoho_inventory
 
-from .models import Subscriber
+SHOPIFY_API_KEY = 'your_shopify_api_key'
+SHOPIFY_API_SECRET = 'your_shopify_api_secret'
+SHOPIFY_REDIRECT_URI = 'your_redirect_uri'
+SHOPIFY_SCOPE = 'read_orders,read_products,write_orders,write_products'
 
-def add_contact_to_zoho(request):
-    contact_data = {
-                'first_name': 'John',
-                'last_name': 'Doe',
-                'email': 'john.doe@example.com',
-             }
-    subscriber = Subscriber(
-        first_name = contact_data['first_name'],
-        last_name = contact_data['last_name'],
-        email = contact_data['email']
-    )
-    return JsonResponse({'status':'success'})
-
-@csrf_exempt
-def install(request):
+def install_app(request):
     shop = request.GET.get('shop')
-    shopify.Session.setup(api_key=settings.SHOPIFY_API_KEY, secret=settings.SHOPIFY_API_SECRET)
-    session = shopify.Session(shop)
-    permission_url = session.create_permission_url(['read_products', 'write_products'])
-    return redirect(permission_url)
+    redirect_uri = SHOPIFY_REDIRECT_URI
+    install_url = f"https://{shop}/admin/oauth/authorize?client_id={SHOPIFY_API_KEY}&scope={SHOPIFY_SCOPE}&redirect_uri={redirect_uri}"
+    return HttpResponseRedirect(install_url)
+
+def callback(request):
+    shop = request.GET.get('shop')
+    code = request.GET.get('code')
+
+    access_token_url = f"https://{shop}/admin/oauth/access_token"
+    payload = {
+        'client_id': SHOPIFY_API_KEY,
+        'client_secret': SHOPIFY_API_SECRET,
+        'code': code
+    }
+    response = requests.post(access_token_url, data=payload)
+    response_data = response.json()
+    access_token = response_data['access_token']
+
+    shopify_store, created = ShopifyStore.objects.get_or_create(shop_name=shop)
+    shopify_store.access_token = access_token
+    shopify_store.save()
+
+    return HttpResponseRedirect(f'/enter-zoho-details/{shop}')
+
+def enter_zoho_details(request, shop_name):
+    store = ShopifyStore.objects.get(shop_name=shop_name)
+
+    if request.method == 'POST':
+        form = ZohoDetailsForm(request.POST, instance=store)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')  # Redirect to the dashboard or any other page
+    else:
+        form = ZohoDetailsForm(instance=store)
+
+    return render(request, 'shopify_sync/enter_zoho_details.html', {'form': form})
 
 @csrf_exempt
-def finalize(request):
-    shopify.Session.setup(api_key=settings.SHOPIFY_API_KEY, secret=settings.SHOPIFY_API_SECRET)
-    session = shopify.Session(request.GET['shop'])
-    token = session.request_token(request.GET)
-    request.session['shopify_token'] = token
-    return JsonResponse({'status': 'success'})
+def webhook(request):
+    if request.method == 'POST':
+        data = request.json()
+        if 'customer' in data:
+            create_zoho_customer(data['customer'])
+        elif 'order' in data:
+            create_zoho_order(data['order'])
+        elif 'inventory_item' in data:
+            create_zoho_inventory(data['inventory_item'])
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'})
