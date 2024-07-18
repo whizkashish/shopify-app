@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^f7ea5n($dq19bjhf3_f%inbl*j+!c*z-!1zh&nqwk=f_p2rr5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shopify-app-sii3.onrender.com']
 
 
 # Application definition
