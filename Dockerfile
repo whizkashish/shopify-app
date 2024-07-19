@@ -14,12 +14,6 @@ COPY requirements.txt /app/
 # Copy the entire project to the /app directory
 COPY myshopifyapp/ /app/
 
-# Set up the database and create a superuser
-RUN python manage.py migrate
-
-# Ensure the SQLite database has the correct permissions
-RUN chmod 644 /app/db.sqlite3
-
 # Expose the port the app runs on
 EXPOSE 8000
 
