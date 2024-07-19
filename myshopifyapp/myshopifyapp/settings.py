@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-^f7ea5n($dq19bjhf3_f%inbl*j+!c*z-!1zh&nqwk=f_p2rr5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shopify-app-sii3.onrender.com']
-CSRF_TRUSTED_ORIGINS = ['https://shopify-app-sii3.onrender.com']
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://*']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'shopifyapp',
+    'pages',
 ]
 
 MIDDLEWARE = [

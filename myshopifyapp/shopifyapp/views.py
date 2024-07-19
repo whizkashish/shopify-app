@@ -45,7 +45,7 @@ def enter_zoho_details(request, shop_name):
         form = ZohoDetailsForm(request.POST, instance=store)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')  # Redirect to the dashboard or any other page
+            return redirect('home')  # Redirect to the dashboard or any other page
     else:
         form = ZohoDetailsForm(instance=store)
 
