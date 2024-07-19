@@ -36,7 +36,7 @@ def callback(request):
     shopify_store.access_token = access_token
     shopify_store.save()
 
-    return HttpResponseRedirect(f'/enter-zoho-details/{shop}')
+    return HttpResponseRedirect(f'/shopify/enter-zoho-details/{shop}')
 
 def enter_zoho_details(request, shop_name):
     store = ShopifyStore.objects.get(shop_name=shop_name)
@@ -49,7 +49,7 @@ def enter_zoho_details(request, shop_name):
     else:
         form = ZohoDetailsForm(instance=store)
 
-    return render(request, 'shopify_sync/enter_zoho_details.html', {'form': form})
+    return render(request, 'shopifyapp/enter_zoho_details.html', {'form': form})
 
 @csrf_exempt
 def webhook(request):
