@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
@@ -133,3 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SHOPIFY_API_KEY = '94c77683151ad23c0664e785feb23048'
 SHOPIFY_API_SECRET = 'ad46f2cea98eb672875a0bb2bb8f564b'
 SHOPIFY_APP_URL = 'your_app_url'  # e.g., https://yourapp.herokuapp.com/
+
+
+X_FRAME_OPTIONS = 'ALLOW FROM https://admin.shopify.com/'
