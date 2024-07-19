@@ -2,6 +2,7 @@ import requests
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import ZohoDetailsForm
 from .models import ShopifyStore 
 from django.views.decorators.csrf import csrf_exempt
@@ -36,7 +37,7 @@ def callback(request):
     shopify_store.access_token = access_token
     shopify_store.save()
 
-    return HttpResponseRedirect(f'/shopify/enter-zoho-details/{shop}')
+    return HttpResponseRedirect(reverse('home'))
 
 def enter_zoho_details(request, shop_name):
     store = ShopifyStore.objects.get(shop_name=shop_name)
