@@ -7,10 +7,10 @@ from .models import ShopifyStore
 from django.views.decorators.csrf import csrf_exempt
 from .zoho_utils import create_zoho_customer, create_zoho_order, create_zoho_inventory
 
-SHOPIFY_API_KEY = '94c77683151ad23c0664e785feb23048'
-SHOPIFY_API_SECRET = 'ad46f2cea98eb672875a0bb2bb8f564b'
+SHOPIFY_API_KEY = '59f41b61ccf5dee1f6847f68fb69a739'
+SHOPIFY_API_SECRET = '60074a1b5cd5eda34e43a92d52cf91ae'
 SHOPIFY_REDIRECT_URI = 'https://shopify-app-sii3.onrender.com/shopify/callback'
-SHOPIFY_SCOPE = 'read_orders,read_products,write_orders,write_products,read_customers, write_customers'
+SHOPIFY_SCOPE = 'read_orders,read_products,write_orders,write_products,read_customers, write_customers, read_inventory'
 
 def install_app(request):
     shop = request.GET.get('shop')
