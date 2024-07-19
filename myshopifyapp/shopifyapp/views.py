@@ -49,7 +49,7 @@ def enter_zoho_details(request, shop_name):
     else:
         form = ZohoDetailsForm(instance=store)
 
-    return render(request, 'shopifyapp/enter_zoho_details.html', {'form': form})
+    return render(request, 'shopifyapp/zoho_details.html', {'form': form})
 
 @csrf_exempt
 def webhook(request):
