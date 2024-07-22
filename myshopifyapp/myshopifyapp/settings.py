@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'shopifyapp.middleware.XFrameOptionsMiddleware',
+    'shopifyapp.middleware.ContentSecurityPolicyMiddleware',
 ]
 
 ROOT_URLCONF = 'myshopifyapp.urls'
@@ -137,11 +139,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#Shopify Settings
-SHOPIFY_API_KEY = '94c77683151ad23c0664e785feb23048'
-SHOPIFY_API_SECRET = 'ad46f2cea98eb672875a0bb2bb8f564b'
-SHOPIFY_APP_URL = 'your_app_url'  # e.g., https://yourapp.herokuapp.com/
-
-
-X_FRAME_OPTIONS = 'ALLOW FROM https://admin.shopify.com/'
-CONTENT_SECURITY_POLICY= "Content-Security-Policy: frame-ancestors https://quickstart-3aa8ad1d.myshopify.com https://admin.shopify.com;"
