@@ -138,3 +138,4 @@ SHOPIFY_APP_URL = 'your_app_url'  # e.g., https://yourapp.herokuapp.com/
 
 
 X_FRAME_OPTIONS = 'ALLOW FROM https://admin.shopify.com/'
+CONTENT_SECURITY_POLICY= "frame-ancestors 'self' https://admin.shopify.com/"
