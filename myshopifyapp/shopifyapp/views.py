@@ -37,7 +37,12 @@ def callback(request):
     shopify_store.access_token = access_token
     shopify_store.save()
 
-    return HttpResponseRedirect(reverse('home'))
+    context = {
+        'shopify_api_key': SHOPIFY_API_KEY,
+        'shop_origin': shop
+    }
+
+    return render(request, 'shopifyapp/initialize_app.html', context)
 
 def enter_zoho_details(request, shop_name):
     store = ShopifyStore.objects.get(shop_name=shop_name)
