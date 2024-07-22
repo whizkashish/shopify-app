@@ -1,4 +1,4 @@
-actions.TitleBar.create(app, { title: '' });
+
 $(document).ready(function() {
   
   
