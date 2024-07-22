@@ -2,85 +2,28 @@
 <html>
 <head>
     <title>Shopify App</title>
-    <script src="https://unpkg.com/@shopify/app-bridge"></script>
-    <script>
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+    <script src="https://unpkg.com/@shopify/app-bridge/actions"></script>
+</head>
+<body>
+    <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             var AppBridge = window['app-bridge'];
             var createApp = AppBridge.default;
             var Redirect = AppBridge.actions.Redirect;
 
             var app = createApp({
-                apiKey: '{{ shopify_api_key }}',  // Your Shopify API key
-                shopOrigin: '{{ shop_origin }}',  // Your shop's origin
+                apiKey: '{{ shopify_api_key }}',
+                shopOrigin: '{{ shop_origin }}',
                 forceRedirect: true,
             });
 
-            const redirect = Redirect.create(app);
-            redirect.dispatch(Redirect.Action.ADMIN_PATH, '/');
-        });
-    </script>
-</head>
-<body>
-    <form id="orderForm" method="post">
-        {% csrf_token %}
-        <!-- Your form fields here -->
-        <input type="text" name="firstName" placeholder="First Name" required>
-        <input type="text" name="lastName" placeholder="Last Name" required>
-        <input type="email" name="emailAddress" placeholder="Email" required>
-        <!-- Add other necessary fields for the order -->
-        <button type="submit">Submit Order</button>
-    </form>
-
-    <!-- Container for 3DS iframe -->
-    <div id="threeDSContainer" style="display:none;">
-        <iframe id="threeDSIframe" width="100%" height="500px"></iframe>
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        const csrftoken = getCookie('csrftoken');
-
-        $(document).ready(function() {
-            $('#orderForm').on('submit', function(e) {
-                e.preventDefault();
-
-                var formData = $(this).serialize();
-
-                $.ajax({
-                    url: '{% url "shopify_app" %}',  // Django view URL
-                    type: 'POST',
-                    data: formData,
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    success: function(response) {
-                        if (response && response.threeDSUrl) {
-                            $('#threeDSIframe').attr('src', response.threeDSUrl);
-                            $('#threeDSContainer').show();
-                        } else {
-                            alert('Order submitted successfully!');
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert('Error: ' + textStatus + ' - ' + errorThrown);
-                    }
-                });
+            app.subscribe(AppBridge.actions.Lifecycle.ActionType.FULLSCREEN, (event) => {
+                // Handle Fullscreen Action
             });
+
+            const redirect = Redirect.create(app);
+            redirect.dispatch(Redirect.Action.APP, '/home');  // Redirect within the Shopify admin interface
         });
     </script>
 </body>
